@@ -57,5 +57,59 @@
 	* redux: createStore()/combineReducers()/applyMiddleware()
 	* react-redux: <Provider store={store}> / connect()(Xxx)
 	* 4个重要模块: reducers/store/actions/action-types
-  
-  
+
+## 4. 使用mongoose操作数据库
+* 连接数据库
+* 定义Schema和Model
+* 通过Model函数对象或Model的实例的方法对集合数据进行CRUD操作 
+    
+## 5. 注册/登陆后台处理
+* 根据接口编写路由的定义
+* 注册: 流程
+* 登陆: 流程
+* 响应数据结构: {code: 0, data: user}, {code: 1, msg: 'xxx'}
+    
+## 6. 注册/登陆前台处理
+* ajax
+  * ajax请求函数(通用): 使用axios库, 返回的是promise对象
+  * 后台接口请求函数: 针对具体接口定义的ajax请求函数, 返回的是promise对象
+* 代理proxy
+  * 是什么？ 
+    * 全称代理服务器，
+    * 将用户/浏览器发送的请求拦截下来, 转发请求到新地址，访问请求的资源，最终将响应转发给用户/浏览器
+  * 作用： 解决浏览器跨域问题
+  * 位置在哪：浏览器端
+  * 注意：只在开发时使用，项目上线时还是需要使用jsonp或者cors技术解决跨域问题
+  * 使用： 在package.json文件 加一个字段 proxy: 'http://localhost:4000'
+
+## 7. 使用redux管理组件状态数据  
+* store.js
+  * 生成并暴露一个store管理对象
+* reducers.js
+  * 包含n个reducer函数
+  * 根据老state和指定action来产生返回一个新的state
+* actions.js
+  * 包含n个action creator函数
+  * 同步action: 返回一个action对象({type: 'XXX', data: xxx})
+  * 异步action: 返回一个函数: disptach => {执行异步代理, 结束时dispatch一个同步action}
+* action-types.js
+  * action的type名称常量
+* component
+  * UI组件: 
+    * 组件内部没有使用任何redux相关的API
+    * 通过props接收容器组件传入的从redux获取数据
+    * 数据类型: 一般和函数
+  * 容器组件
+    connect(
+      state => ({user: state.user}),
+      {action1, action2}
+    )(UI组件)
+* 修改套路
+  * actions / action-types
+  * reducers
+  * 容器组件
+  * 入口文件
+  * UI组件    
+* redux插件
+  * 需要引入redux@3.7.2版本
+  * 能够实时查看redux的状态数据和action  
