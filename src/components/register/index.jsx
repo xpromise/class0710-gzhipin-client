@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {NavBar, List, InputItem, Button, WingBlank, WhiteSpace, Radio} from 'antd-mobile';
 import PropTypes from 'prop-types';
+import {Redirect} from 'react-router-dom';
 
 import Logo from '../logo';
 // import {reqRegister} from '../../api';
@@ -49,11 +50,21 @@ class Register extends Component {
   
   render () {
     const {type} = this.state;
+    const {msg, redirectTo} = this.props.user;
+    
+    if (redirectTo) {
+      //编程式导航
+      // this.props.history.replace(redirectTo);
+      //路由链接跳转
+      return <Redirect to={redirectTo} />
+    }
+    
     return (
       <div>
         <NavBar>硅 谷 直 聘</NavBar>
         <Logo />
         <WingBlank>
+          {msg ? <p className='err-msg'>{msg}</p> : ''}
           <form>
             <List>
               <WhiteSpace />

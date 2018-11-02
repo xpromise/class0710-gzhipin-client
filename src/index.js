@@ -8,6 +8,9 @@ import Register from './containers/register';
 import Main from './components/main';
 import store from './redux/store';
 
+//引入公共的样式
+import './assets/less/index.less';
+
 ReactDOM.render(
   (
     <Provider store={store}>
