@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {Redirect} from 'react-router-dom';
 
 import Logo from '../logo';
-// import {reqRegister} from '../../api';
 
 const Item = List.Item;
 
