@@ -113,3 +113,20 @@
 * redux插件
   * 需要引入redux@3.7.2版本
   * 能够实时查看redux的状态数据和action  
+  
+## 8. 实现user信息完善功能
+* 用户信息完善界面路由组件: 
+  * 组件: dashen-info/laoban-info/header-selector
+  * 界面: Navbar/List/Grid/InputItem/Button/TextareaItem
+  * 收集用户输入数据: onChange监听/state 
+  * 注册2级路由: 在main路由组件
+* 登陆/注册成功后的跳转路由计算
+  * 定义工具函数
+  * 计算逻辑分析
+* 后台路由处理
+* 前台接口请求函数ajax
+* 异步action/同步action 和 action-types
+* reducers函数
+* 创建容器组件
+* 入口文件更新组件
+* 修改UI组件 
