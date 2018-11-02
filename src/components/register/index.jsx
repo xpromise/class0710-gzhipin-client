@@ -1,12 +1,18 @@
 import React, {Component} from 'react';
 import {NavBar, List, InputItem, Button, WingBlank, WhiteSpace, Radio} from 'antd-mobile';
+import PropTypes from 'prop-types';
 
 import Logo from '../logo';
-import {reqRegister} from '../../api';
+// import {reqRegister} from '../../api';
 
 const Item = List.Item;
 
 class Register extends Component {
+  static propTypes = {
+    user: PropTypes.object.isRequired,
+    register: PropTypes.func.isRequired
+  }
+  
   state = {
     username: '',
     password: '',
@@ -14,40 +20,26 @@ class Register extends Component {
     type: 'laoban'
   }
   
-  /*setUsername = val => {
-    //更新状态
-    this.setState({
-      username: val
-    })
-  }
-  
-  setPassword = val => {
-    this.setState({
-      password: val
-    })
-  }*/
-  
   handleChange = (name, val) => {
     //更新状态
     this.setState({
       [name]: val
     })
   }
-  
+  /*
+    代理proxy：
+      1. 是什么？ 全称代理服务器，
+        将用户/浏览器发送的请求拦截下来, 转发请求到新地址，访问请求的资源，最终将响应转发给用户/浏览器
+      2. 作用： 解决浏览器跨域问题
+      3. 位置在哪：浏览器端
+      4. 只在开发时使用，项目上线时还是需要使用jsonp或者cors技术解决跨域问题
+      5. 使用： 在package.json文件 加一个字段 proxy: 'http://localhost:4000'
+   */
   register = async () => {
     //获取表单数据
     const {username, rePassword, password, type} = this.state;
-    console.log(username, rePassword, password, type);
-    //判断密码和确认密码是否一致
-    if (password === rePassword) {
-      //发送ajax请求
-      const data = await reqRegister({username, password, type});
-      console.log(data);
-    } else {
-      //提示两次密码输入不一致
-      alert('两次密码输入不一致');
-    }
-    
+    //发送ajax，更新状态
+    this.props.register({username, password, rePassword, type});
   }
   
   goLogin = () => {
