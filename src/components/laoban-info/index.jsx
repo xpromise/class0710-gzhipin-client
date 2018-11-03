@@ -31,7 +31,7 @@ class LaobanInfo extends Component {
   }
   
   saveUserInfo = () => {
-    this.props.updateUserInfo(this.state);
+    this.props.updateUserInfo({...this.state, type: 'laoban'});
   }
   
   render () {
