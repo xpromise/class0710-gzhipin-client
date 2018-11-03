@@ -3,7 +3,7 @@
  */
 
 import {combineReducers} from 'redux';
-import {ERR_MSG, AUTH_SUCCESS, RESET_USER, UPDATE_USER} from './action-types';
+import {ERR_MSG, AUTH_SUCCESS, RESET_USER, UPDATE_USER, UPDATE_USER_LIST, RESET_USER_LIST} from './action-types';
 
 import {getRedirectPath} from '../utils';
 
@@ -31,9 +31,22 @@ function user(preState = initUserState, action) {
   }
 }
 
+const initUserListState = [];
+function userList(preState = initUserListState, action) {
+  switch (action.type) {
+    case UPDATE_USER_LIST :
+      return action.data;
+    case  RESET_USER_LIST :
+      return action.data;
+    default :
+      return preState;
+  }
+}
+
 //如何暴露, 合并多个reducers函数
 export default combineReducers({
-  user
+  user,
+  userList
 })
 /*
   最终向外暴露： {xxx: xxx(), yyy: yyy()}

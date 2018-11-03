@@ -4,8 +4,8 @@
     - 异步action creator： 返回值是一个回调函数
  */
 
-import {reqLogin, reqRegister, reqUpdateUserInfo, reqGetUserInfo} from '../api';
-import {ERR_MSG, AUTH_SUCCESS, UPDATE_USER, RESET_USER} from './action-types';
+import {reqLogin, reqRegister, reqUpdateUserInfo, reqGetUserInfo, reqGetUserList} from '../api';
+import {ERR_MSG, AUTH_SUCCESS, UPDATE_USER, RESET_USER, RESET_USER_LIST, UPDATE_USER_LIST} from './action-types';
 
 //同步action   注册成功   action-types有几个值，actions中就有几个同步action
 export const authSuccess = user => ({type: AUTH_SUCCESS, data: user});
@@ -18,6 +18,12 @@ export const updateUser = user => ({type: UPDATE_USER, data: user});
 
 //同步action  更新用户信息数据失败
 export const resetUser = msg => ({type: RESET_USER, data: msg});
+
+//同步action  更新用户列表数据成功
+export const updateUserList = userlist => ({type: UPDATE_USER_LIST, data: userlist});
+
+//同步action  更新用户列表数据失败
+export const resetUserList = msg => ({type: RESET_USER_LIST, data: msg});
 
 //注册的异步的action
 export const register = data => {
@@ -178,6 +184,28 @@ export const getUserInfo = () => {
       .catch(err => {
         
         dispatch(resetUser({msg: '网络不稳定，请重新试试~'}));
+      })
+  }
+}
+
+//获取用户列表数据的异步action
+export const getUserList = type => {
+  return dispatch => {
+    //发送请求
+    reqGetUserList(type)
+      .then(res => {
+        const result = res.data;
+        if (result.code === 0) {
+          //请求成功
+          dispatch(updateUserList(result.data));
+        } else {
+          //请求失败
+          dispatch(updateUserList({msg: result.msg}));
+        }
+      })
+      .catch(err => {
+        //请求失败
+        dispatch(updateUserList({msg: '网络不稳定，请重新试试~'}));
       })
   }
 }
