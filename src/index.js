@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 
 import Login from './containers/login';
 import Register from './containers/register';
-import Main from './components/main';
+import Main from './containers/main';
 import store from './redux/store';
 
 //引入公共的样式

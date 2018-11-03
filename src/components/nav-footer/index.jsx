@@ -18,14 +18,14 @@ class NavFooter extends Component {
     return (
       <TabBar>
         {
-          navList.map((item, index) => <Item
+          navList.map((item, index) => (<Item
             key={index}
             title={item.text}
             icon={{uri: require(`./images/${item.icon}.png`)}}
             selectedIcon={{uri: require(`./images/${item.icon}-selected.png`)}}
             selected={pathname === item.path}
             onPress={() => this.props.history.replace(item.path)}
-          />)
+          />))
         }
       </TabBar>
     )

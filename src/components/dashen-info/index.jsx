@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {NavBar, InputItem, Button, TextareaItem} from 'antd-mobile';
 import PropTypes from 'prop-types';
+import {Redirect} from 'react-router-dom';
 
 import HeaderSelector from '../header-selector';
 
@@ -33,7 +34,10 @@ class DashenInfo extends Component {
   }
   
   render () {
-    const {msg} = this.props.user;
+    const {msg, header} = this.props.user;
+    if (header) {
+      return <Redirect to='/dashen'/>
+    }
     return (
       <div>
         <NavBar>大神信息完善</NavBar>

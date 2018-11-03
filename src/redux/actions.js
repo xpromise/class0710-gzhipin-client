@@ -4,7 +4,7 @@
     - 异步action creator： 返回值是一个回调函数
  */
 
-import {reqLogin, reqRegister, reqUpdateUserInfo} from '../api';
+import {reqLogin, reqRegister, reqUpdateUserInfo, reqGetUserInfo} from '../api';
 import {ERR_MSG, AUTH_SUCCESS, UPDATE_USER, RESET_USER} from './action-types';
 
 //同步action   注册成功   action-types有几个值，actions中就有几个同步action
@@ -160,11 +160,24 @@ export const updateUserInfo = data => {
   }
 }
 
-/*
-  修改步骤：
-  1. actions / action-types
-  2. reducers
-  3. 容器组件
-  4. 入口文件
-  5. UI组件
- */
+//获取用户信息的异步action
+export const getUserInfo = () => {
+  return dispatch => {
+    //发送请求
+    reqGetUserInfo()
+      .then(res => {
+        const result = res.data;
+        if (result.code === 0) {
+          //请求成功
+          dispatch(updateUser(result.data));
+        } else {
+          //请求失败
+          dispatch(resetUser({msg: result.msg}));
+        }
+      })
+      .catch(err => {
+        
+        dispatch(resetUser({msg: '网络不稳定，请重新试试~'}));
+      })
+  }
+}
