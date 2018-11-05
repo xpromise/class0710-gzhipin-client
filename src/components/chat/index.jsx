@@ -4,16 +4,29 @@
 
 import React, {Component} from 'react'
 import {NavBar, List, InputItem} from 'antd-mobile'
+import Cookies from 'js-cookie';
+import PropTypes from 'prop-types';
 
 const Item = List.Item
 
 export default class Chat extends Component {
+  static propTypes = {
+    sendMessage: PropTypes.func.isRequired
+  }
+  
   state = {
     content: ''
   }
   
   sendMessage = () => {
+    //发送者的id
+    const from = Cookies.get('userid');
+    //接受者的id
+    const to = this.props.match.params.userid;
+    //消息内容
+    const {content} = this.state;
     //发送消息
+    this.props.sendMessage({from, to, content});
   }
   
   render() {

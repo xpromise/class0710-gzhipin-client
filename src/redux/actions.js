@@ -3,7 +3,8 @@
     - 同步action creator： 返回值是action对象
     - 异步action creator： 返回值是一个回调函数
  */
-
+// 引入客户端io
+import io from 'socket.io-client';
 import {reqLogin, reqRegister, reqUpdateUserInfo, reqGetUserInfo, reqGetUserList} from '../api';
 import {ERR_MSG, AUTH_SUCCESS, UPDATE_USER, RESET_USER, RESET_USER_LIST, UPDATE_USER_LIST} from './action-types';
 
@@ -200,12 +201,29 @@ export const getUserList = type => {
           dispatch(updateUserList(result.data));
         } else {
           //请求失败
-          dispatch(updateUserList({msg: result.msg}));
+          dispatch(resetUserList({msg: result.msg}));
         }
       })
       .catch(err => {
         //请求失败
-        dispatch(updateUserList({msg: '网络不稳定，请重新试试~'}));
+        dispatch(resetUserList({msg: '网络不稳定，请重新试试~'}));
       })
+  }
+}
+
+// 连接服务器, 得到代表连接的socket对象
+const socket = io('ws://localhost:5000');
+// 绑定'receiveMessage'的监听, 来接收服务器发送的消息
+socket.on('receiveMsg', function (data) {
+  console.log('浏览器端接收服务器发送的消息:', data)
+})
+
+//发送聊天消息数据的异步action
+export const sendMessage = ({content, from, to}) => {
+  return dispatch => {
+    //发送聊天消息
+    // 客户端向服务器发送消息
+    socket.emit('sendMsg', {content, from, to});
+    console.log('浏览器端向服务器发送消息');
   }
 }

@@ -11,7 +11,7 @@ import Laoban from "../../containers/laoban";
 import Dashen from "../../containers/dashen";
 import Message from "../../containers/message";
 import NavFooter from "../../components/nav-footer";
-import Chat from "../../components/chat";
+import Chat from "../../containers/chat";
 import {getRedirectPath} from '../../utils';
 
 class Main extends Component {
