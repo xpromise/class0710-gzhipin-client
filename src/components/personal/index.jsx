@@ -11,7 +11,8 @@ const Brief = Item.Brief
 
 export default class Personal extends React.Component {
   static propTypes = {
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    resetUser: PropTypes.func.isRequired
   }
   
   logout = () => {
@@ -21,6 +22,8 @@ export default class Personal extends React.Component {
         //退出登录
         //清除cookie
           Cookies.remove('userid');
+          //清除当前的用户信息，实际上清除redux保管的user状态数据
+          this.props.resetUser({});
         //路由跳转到登录页面
           this.props.history.replace('/login');
         }},

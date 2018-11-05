@@ -11,6 +11,7 @@ import Laoban from "../../containers/laoban";
 import Dashen from "../../containers/dashen";
 import Message from "../../containers/message";
 import NavFooter from "../../components/nav-footer";
+import Chat from "../../components/chat";
 import {getRedirectPath} from '../../utils';
 
 class Main extends Component {
@@ -103,6 +104,7 @@ class Main extends Component {
           <Route path="/dashen" component={Dashen}/>
           <Route path="/message" component={Message}/>
           <Route path="/personal" component={Personal}/>
+          <Route path="/chat/:userid" component={Chat}/>
         </Switch>
         {currentNav ? <NavFooter navList={navList}/> : ''}
       </div>

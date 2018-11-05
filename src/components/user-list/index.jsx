@@ -4,6 +4,7 @@
 import React from 'react'
 import {Card, WingBlank, WhiteSpace} from 'antd-mobile';
 import PropTypes from 'prop-types';
+import {withRouter} from 'react-router-dom';
 
 const Header = Card.Header
 const Body = Card.Body
@@ -14,10 +15,11 @@ class UserList extends React.Component {
   }
   
   render() {
-    const {username, header, post, info, salary, company} = this.props.item;
+    const {username, header, post, info, salary, company, _id} = this.props.item;
+    
     return (
       <WingBlank>
-        <div>
+        <div onClick={() => this.props.history.push(`/chat/${_id}`)}>
           <WhiteSpace/>
           <Card>
             <Header
@@ -37,4 +39,4 @@ class UserList extends React.Component {
   }
 }
 
-export default UserList
+export default withRouter(UserList);

@@ -8,6 +8,8 @@ import Register from './containers/register';
 import Main from './containers/main';
 import store from './redux/store';
 
+import './test/socketio_test';
+
 //引入公共的样式
 import './assets/less/index.less';
 
