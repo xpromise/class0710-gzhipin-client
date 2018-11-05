@@ -5,8 +5,17 @@
  */
 // 引入客户端io
 import io from 'socket.io-client';
-import {reqLogin, reqRegister, reqUpdateUserInfo, reqGetUserInfo, reqGetUserList} from '../api';
-import {ERR_MSG, AUTH_SUCCESS, UPDATE_USER, RESET_USER, RESET_USER_LIST, UPDATE_USER_LIST} from './action-types';
+import {reqLogin, reqRegister, reqUpdateUserInfo, reqGetUserInfo, reqGetUserList, reqGetChatMsgs} from '../api';
+import {
+  ERR_MSG,
+  AUTH_SUCCESS,
+  UPDATE_USER,
+  RESET_USER,
+  RESET_USER_LIST,
+  UPDATE_USER_LIST,
+  RESET_CHAT_MSGS,
+  UPDATE_CHAT_MSGS
+} from './action-types';
 
 //同步action   注册成功   action-types有几个值，actions中就有几个同步action
 export const authSuccess = user => ({type: AUTH_SUCCESS, data: user});
@@ -25,6 +34,12 @@ export const updateUserList = userlist => ({type: UPDATE_USER_LIST, data: userli
 
 //同步action  更新用户列表数据失败
 export const resetUserList = msg => ({type: RESET_USER_LIST, data: msg});
+
+//同步action  获取当前用户聊天信息列表数据成功
+export const updateChatMsgs = chatMsgs => ({type: UPDATE_CHAT_MSGS, data: chatMsgs});
+
+//同步action   获取当前用户聊天信息列表数据失败
+export const resetChatMsgs = msg => ({type: RESET_CHAT_MSGS, data: msg});
 
 //注册的异步的action
 export const register = data => {
@@ -225,5 +240,25 @@ export const sendMessage = ({content, from, to}) => {
     // 客户端向服务器发送消息
     socket.emit('sendMsg', {content, from, to});
     console.log('浏览器端向服务器发送消息');
+  }
+}
+
+//获取当前用户聊天消息列表的异步action
+export const getChatMsgs = () => {
+  return dispatch => {
+    //发送请求
+    reqGetChatMsgs()
+      .then(res => {
+        const result = res.data;
+        if (result.code === 0) {
+          //请求成功
+          dispatch(updateChatMsgs(result.data));
+        } else {
+          dispatch(resetChatMsgs({msg: result.msg}));
+        }
+      })
+      .catch(err => {
+        dispatch(resetChatMsgs({msg: '网络不稳定，请重新试试~'}));
+      })
   }
 }

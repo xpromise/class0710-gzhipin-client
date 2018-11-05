@@ -3,7 +3,16 @@
  */
 
 import {combineReducers} from 'redux';
-import {ERR_MSG, AUTH_SUCCESS, RESET_USER, UPDATE_USER, UPDATE_USER_LIST, RESET_USER_LIST} from './action-types';
+import {
+  ERR_MSG,
+  AUTH_SUCCESS,
+  RESET_USER,
+  UPDATE_USER,
+  UPDATE_USER_LIST,
+  RESET_USER_LIST,
+  UPDATE_CHAT_MSGS,
+  RESET_CHAT_MSGS
+} from './action-types';
 
 import {getRedirectPath} from '../utils';
 
@@ -43,12 +52,29 @@ function userList(preState = initUserListState, action) {
   }
 }
 
+const initChatListState = {
+  chatMsgs: [],
+  users: {}
+};
+function chatList(preState = initChatListState, action) {
+  switch (action.type) {
+    case UPDATE_CHAT_MSGS :
+      return action.data;
+    case RESET_CHAT_MSGS :
+      return action.data;
+    default :
+      return preState;
+  }
+}
+
+
 //如何暴露, 合并多个reducers函数
 export default combineReducers({
   user,
-  userList
+  userList,
+  chatList
 })
 /*
-  最终向外暴露： {xxx: xxx(), yyy: yyy()}
+  最终向外暴露： {user: user(), userList: userList(), chatList: chatList()}
  */
 
