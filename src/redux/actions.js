@@ -14,7 +14,8 @@ import {
   RESET_USER_LIST,
   UPDATE_USER_LIST,
   RESET_CHAT_MSGS,
-  UPDATE_CHAT_MSGS
+  UPDATE_CHAT_MSGS,
+  UPDATE_CHAT_LIST
 } from './action-types';
 
 //同步action   注册成功   action-types有几个值，actions中就有几个同步action
@@ -40,6 +41,8 @@ export const updateChatMsgs = chatMsgs => ({type: UPDATE_CHAT_MSGS, data: chatMs
 
 //同步action   获取当前用户聊天信息列表数据失败
 export const resetChatMsgs = msg => ({type: RESET_CHAT_MSGS, data: msg});
+
+export const updateChatList = chatMsg => ({type: UPDATE_CHAT_LIST, data: chatMsg})
 
 //注册的异步的action
 export const register = data => {
@@ -228,10 +231,8 @@ export const getUserList = type => {
 
 // 连接服务器, 得到代表连接的socket对象
 const socket = io('ws://localhost:5000');
-// 绑定'receiveMessage'的监听, 来接收服务器发送的消息
-socket.on('receiveMsg', function (data) {
-  console.log('浏览器端接收服务器发送的消息:', data)
-})
+
+
 
 //发送聊天消息数据的异步action
 export const sendMessage = ({content, from, to}) => {
@@ -246,6 +247,15 @@ export const sendMessage = ({content, from, to}) => {
 //获取当前用户聊天消息列表的异步action
 export const getChatMsgs = () => {
   return dispatch => {
+    // 绑定'receiveMessage'的监听, 来接收服务器发送的消息
+    // 一旦服务器发送消息，可以更新redux中状态数据
+    if (!socket.isFirst) {
+      socket.isFirst = true;
+      socket.on('receiveMsg', function (data) {
+        console.log('浏览器端接收服务器发送的消息:', data)
+        dispatch(updateChatList(data));
+      })
+    }
     //发送请求
     reqGetChatMsgs()
       .then(res => {
@@ -262,3 +272,4 @@ export const getChatMsgs = () => {
       })
   }
 }
+

@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react'
-import {NavBar, List, InputItem, Icon} from 'antd-mobile'
+import {NavBar, List, InputItem, Icon, Grid} from 'antd-mobile'
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
@@ -17,7 +17,8 @@ export default class Chat extends Component {
   }
   
   state = {
-    content: ''
+    content: '',
+    isShow: false
   }
   
   sendMessage = () => {
@@ -29,10 +30,41 @@ export default class Chat extends Component {
     const {content} = this.state;
     //发送消息
     this.props.sendMessage({from, to, content});
+    //清空用户的输入
+    this.setState({
+      content: ''
+    })
+  }
+  
+  componentWillMount () {
+    const emojis = ['😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀'
+      ,'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣'
+      ,'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣'
+      ,'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣', '🙉'];
+  
+    this.emojis = emojis.map(emoji => ({text: emoji}));
   }
   
   componentDidMount () {
     this.props.getChatMsgs();
+    // 初始显示列表
+    window.scrollTo(0, document.body.scrollHeight)
+  }
+  
+  componentDidUpdate () {
+    // 更新显示列表
+    window.scrollTo(0, document.body.scrollHeight)
+  }
+  
+  toggleShow = () => {
+    const isShow = !this.state.isShow;
+    this.setState({isShow})
+    if (isShow) {
+      //解决bug
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 0)
+    }
   }
   
   render() {
@@ -57,8 +89,6 @@ export default class Chat extends Component {
       return Date.parse(a.create_time) - Date.parse(b.create_time)
     })
     console.log(chatList);
-    
-   
     
     return (
       <div id='chat-page'>
@@ -99,10 +129,24 @@ export default class Chat extends Component {
           <InputItem
             placeholder="请输入"
             extra={
-              <span onClick={this.sendMessage}>发送</span>
+              <div>
+                <span onClick={this.toggleShow}>🤣</span>
+                <span onClick={this.sendMessage}>发送</span>
+              </div>
             }
             onChange={val => this.setState({content: val})}
+            value={this.state.content}
+            onFocus={() => this.setState({isShow: false})}
           />
+          {
+            this.state.isShow ? (<Grid
+              data={this.emojis}
+              isCarousel
+              onClick={_el => this.setState({content: this.state.content + _el.text})}
+              columnNum={8}
+              carouselMaxRow={4}
+            />) : null
+          }
         </div>
       </div>
     )

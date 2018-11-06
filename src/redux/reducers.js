@@ -11,7 +11,8 @@ import {
   UPDATE_USER_LIST,
   RESET_USER_LIST,
   UPDATE_CHAT_MSGS,
-  RESET_CHAT_MSGS
+  RESET_CHAT_MSGS,
+  UPDATE_CHAT_LIST
 } from './action-types';
 
 import {getRedirectPath} from '../utils';
@@ -62,6 +63,11 @@ function chatList(preState = initChatListState, action) {
       return action.data;
     case RESET_CHAT_MSGS :
       return action.data;
+    case UPDATE_CHAT_LIST :
+      return {
+        chatMsgs: [...preState.chatMsgs, action.data],
+        users: preState.users
+      }
     default :
       return preState;
   }
