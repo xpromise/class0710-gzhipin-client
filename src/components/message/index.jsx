@@ -95,6 +95,7 @@ class Message extends Component {
                 thumb={require(`../../assets/images/${header}.png`)}
                 arrow='horizontal'
                 key={index}
+                onClick={() => this.props.history.push(`/chat/${id}`)}
               >
                 {content}
                 <Brief>{username}</Brief>

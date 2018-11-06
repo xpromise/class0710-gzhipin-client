@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
-import {NavBar} from 'antd-mobile';
+import {NavBar, Icon} from 'antd-mobile';
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 
@@ -51,8 +51,6 @@ class Main extends Component {
     }
   ]
   
-  
-  
   render () {
     /*
     1. 本地没有cookie，跳转到登录页面（用户没有登录，一上来输入网址访问）
@@ -70,7 +68,7 @@ class Main extends Component {
     if (!user._id) {
       //发送请求，请求用户的数据，保存在redux中
       this.props.getUserInfo();
-      return <div>loading...</div>;
+      return <Icon type='loading' size='lg' style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, margin: 'auto'}}/>;
     }
     // 3. 本地有cookie ，并且redux有数据， 直接使用
     // 如果用户直接访问 / 路径，没有界面显示，重定向到/laoban  /dashen /laobanInfo  /dashenInfo
@@ -96,16 +94,18 @@ class Main extends Component {
     
     return (
       <div>
-        {currentNav ? <NavBar>{currentNav.title}</NavBar> : ''}
-        <Switch>
-          <Route path="/laobanInfo" component={LaobanInfo}/>
-          <Route path="/laoban" component={Laoban}/>
-          <Route path="/dashenInfo" component={DashenInfo}/>
-          <Route path="/dashen" component={Dashen}/>
-          <Route path="/message" component={Message}/>
-          <Route path="/personal" component={Personal}/>
-          <Route path="/chat/:userid" component={Chat}/>
-        </Switch>
+        {currentNav ? <NavBar className="navbar-top">{currentNav.title}</NavBar> : ''}
+        <div style={{paddingTop: '50px', paddingBottom: '60px'}}>
+          <Switch>
+            <Route path="/laobanInfo" component={LaobanInfo}/>
+            <Route path="/laoban" component={Laoban}/>
+            <Route path="/dashenInfo" component={DashenInfo}/>
+            <Route path="/dashen" component={Dashen}/>
+            <Route path="/message" component={Message}/>
+            <Route path="/personal" component={Personal}/>
+            <Route path="/chat/:userid" component={Chat}/>
+          </Switch>
+        </div>
         {currentNav ? <NavFooter navList={navList}/> : ''}
       </div>
     )
