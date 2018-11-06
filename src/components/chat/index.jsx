@@ -6,6 +6,7 @@ import React, {Component} from 'react'
 import {NavBar, List, InputItem, Icon, Grid} from 'antd-mobile'
 import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
+import {updateUnReadCount} from "../../redux/actions";
 
 const Item = List.Item
 
@@ -13,7 +14,8 @@ export default class Chat extends Component {
   static propTypes = {
     sendMessage: PropTypes.func.isRequired,
     getChatMsgs: PropTypes.func.isRequired,
-    chatList: PropTypes.object.isRequired
+    chatList: PropTypes.object.isRequired,
+    updateUnReadCount: PropTypes.func.isRequired
   }
   
   state = {
@@ -48,12 +50,16 @@ export default class Chat extends Component {
   componentDidMount () {
     this.props.getChatMsgs();
     // 初始显示列表
-    window.scrollTo(0, document.body.scrollHeight)
+    window.scrollTo(0, document.body.scrollHeight);
   }
   
   componentDidUpdate () {
     // 更新显示列表
     window.scrollTo(0, document.body.scrollHeight)
+  }
+  
+  componentWillUnmount ()  {
+    this.props.updateUnReadCount(this.props.match.params.userid);
   }
   
   toggleShow = () => {

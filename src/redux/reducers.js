@@ -13,7 +13,9 @@ import {
   RESET_USER_LIST,
   UPDATE_CHAT_MSGS,
   RESET_CHAT_MSGS,
-  UPDATE_CHAT_LIST
+  UPDATE_CHAT_LIST,
+  RESET_UNREADCOUNT,
+  UPDATE_UNREADCOUNT
 } from './action-types';
 
 import {getRedirectPath} from '../utils';
@@ -63,7 +65,7 @@ const initChatListState = {
 function chatList(preState = initChatListState, action) {
   switch (action.type) {
     case UPDATE_CHAT_MSGS :
-      const userid = Cookies.get('userid');
+      var userid = Cookies.get('userid');
       return {
         ...action.data,
         unReadCount: action.data.chatMsgs.reduce((prev, curr) => {
@@ -76,6 +78,19 @@ function chatList(preState = initChatListState, action) {
       return {
         chatMsgs: [...preState.chatMsgs, action.data],
         users: preState.users
+      }
+    case UPDATE_UNREADCOUNT :
+      var userid = Cookies.get('userid');
+      return {
+        chatMsgs: preState.chatMsgs.map(chatMsg => {
+          if (chatMsg.from === action.data.from && chatMsg.to === userid && !chatMsg.read) {
+            return {...chatMsg, read: true}
+          } else {
+            return chatMsg;
+          }
+        }),
+        users: preState.users,
+        unReadCount: preState.unReadCount - action.data.count
       }
     default :
       return preState;

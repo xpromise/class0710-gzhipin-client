@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import UserList from '../../containers/user-list';
+import QueueAnim from 'rc-queue-anim';
 
 class Dashen extends Component {
   static propTypes = {
@@ -17,9 +18,11 @@ class Dashen extends Component {
     const {userList} = this.props;
     return (
       <div>
-        {
-          userList.map((item, index) => <UserList key={index} item={item} />)
-        }
+        <QueueAnim delay={300} type='scale'>
+          {
+            userList.map((item, index) => <UserList key={index} item={item} />)
+          }
+        </QueueAnim>
       </div>
     )
   }

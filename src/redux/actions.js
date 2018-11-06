@@ -5,7 +5,15 @@
  */
 // 引入客户端io
 import io from 'socket.io-client';
-import {reqLogin, reqRegister, reqUpdateUserInfo, reqGetUserInfo, reqGetUserList, reqGetChatMsgs} from '../api';
+import {
+  reqLogin,
+  reqRegister,
+  reqUpdateUserInfo,
+  reqGetUserInfo,
+  reqGetUserList,
+  reqGetChatMsgs,
+  reqUpdateUnReadCount
+} from '../api';
 import {
   ERR_MSG,
   AUTH_SUCCESS,
@@ -15,7 +23,9 @@ import {
   UPDATE_USER_LIST,
   RESET_CHAT_MSGS,
   UPDATE_CHAT_MSGS,
-  UPDATE_CHAT_LIST
+  UPDATE_CHAT_LIST,
+  RESET_UNREADCOUNT,
+  UPDATE_UNREADCOUNT
 } from './action-types';
 
 //同步action   注册成功   action-types有几个值，actions中就有几个同步action
@@ -43,6 +53,10 @@ export const updateChatMsgs = chatMsgs => ({type: UPDATE_CHAT_MSGS, data: chatMs
 export const resetChatMsgs = msg => ({type: RESET_CHAT_MSGS, data: msg});
 
 export const updateChatList = chatMsg => ({type: UPDATE_CHAT_LIST, data: chatMsg})
+
+
+export const updateCount = from => ({type: UPDATE_UNREADCOUNT, data: from})
+export const resetCount = msg => ({type: RESET_UNREADCOUNT, data: msg})
 
 //注册的异步的action
 export const register = data => {
@@ -275,4 +289,22 @@ function getMsgs(dispatch) {
     .catch(err => {
       dispatch(resetChatMsgs({msg: '网络不稳定，请重新试试~'}));
     })
+}
+
+//更新未对消息数量的异步action
+export const updateUnReadCount = from => {
+  return dispatch => {
+    reqUpdateUnReadCount(from)
+      .then(res => {
+        const result = res.data;
+        if (result.code === 0) {
+          dispatch(updateCount({from, count: result.count}));
+        } else {
+          dispatch(resetCount({msg: result.msg}));
+        }
+      })
+      .catch(err => {
+        dispatch(resetCount({msg: '网络失败~~~'}));
+      })
+  }
 }
