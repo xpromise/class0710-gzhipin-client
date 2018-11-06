@@ -3,6 +3,7 @@
  */
 
 import {combineReducers} from 'redux';
+import Cookies from 'js-cookie';
 import {
   ERR_MSG,
   AUTH_SUCCESS,
@@ -16,6 +17,7 @@ import {
 } from './action-types';
 
 import {getRedirectPath} from '../utils';
+
 
 //初始化状态（今后reducer函数要管理的状态）
 const initUserState = {
@@ -55,12 +57,19 @@ function userList(preState = initUserListState, action) {
 
 const initChatListState = {
   chatMsgs: [],
-  users: {}
+  users: {},
+  unReadCount: 0
 };
 function chatList(preState = initChatListState, action) {
   switch (action.type) {
     case UPDATE_CHAT_MSGS :
-      return action.data;
+      const userid = Cookies.get('userid');
+      return {
+        ...action.data,
+        unReadCount: action.data.chatMsgs.reduce((prev, curr) => {
+          return prev + (!curr.read && curr.to === userid ? 1 : 0);
+        }, 0)
+      };
     case RESET_CHAT_MSGS :
       return action.data;
     case UPDATE_CHAT_LIST :

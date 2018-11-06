@@ -10,7 +10,7 @@ import Personal from "../../containers/personal";
 import Laoban from "../../containers/laoban";
 import Dashen from "../../containers/dashen";
 import Message from "../../containers/message";
-import NavFooter from "../../components/nav-footer";
+import NavFooter from "../../containers/nav-footer";
 import Chat from "../../containers/chat";
 import {getRedirectPath} from '../../utils';
 
@@ -65,7 +65,8 @@ class Main extends Component {
     }
     // 2. 本地有cookie ， redux没有状态数据（用户登录了，刷新了页面），根据cookie发送请求请求当前用户的状态数据，保存在redux
     const {user} = this.props;
-    if (!user._id) {
+    //!user.msg  为了解决登录或者注册时提示错误信息
+    if (!user._id && !user.msg) {
       //发送请求，请求用户的数据，保存在redux中
       this.props.getUserInfo();
       return <Icon type='loading' size='lg' style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, margin: 'auto'}}/>;

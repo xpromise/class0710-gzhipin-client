@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import UserList from '../user-list';
+import UserList from '../../containers/user-list';
 
 class Laoban extends Component {
   static propTypes = {

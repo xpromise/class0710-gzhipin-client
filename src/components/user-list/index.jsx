@@ -4,14 +4,18 @@
 import React from 'react'
 import {Card, WingBlank, WhiteSpace} from 'antd-mobile';
 import PropTypes from 'prop-types';
-import {withRouter} from 'react-router-dom';
 
 const Header = Card.Header
 const Body = Card.Body
 
 class UserList extends React.Component {
   static propTypes = {
-    item: PropTypes.object.isRequired
+    item: PropTypes.object.isRequired,
+    getChatMsgs: PropTypes.func.isRequired
+  }
+  
+  componentDidMount () {
+    this.props.getChatMsgs();
   }
   
   render() {
@@ -39,4 +43,4 @@ class UserList extends React.Component {
   }
 }
 
-export default withRouter(UserList);
+export default UserList;

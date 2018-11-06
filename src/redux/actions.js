@@ -125,6 +125,8 @@ export const login = data => {
         const result = res.data;  // res {header: {}, data: {响应数据}}
         if (result.code === 0) {
           //注册成功
+          //获取用户信息列表
+          getMsgs(dispatch);
           dispatch(authSuccess(result.data));  // result.data响应信息中的用户信息
         } else {
           console.log(result.msg);
@@ -232,8 +234,6 @@ export const getUserList = type => {
 // 连接服务器, 得到代表连接的socket对象
 const socket = io('ws://localhost:5000');
 
-
-
 //发送聊天消息数据的异步action
 export const sendMessage = ({content, from, to}) => {
   return dispatch => {
@@ -247,29 +247,32 @@ export const sendMessage = ({content, from, to}) => {
 //获取当前用户聊天消息列表的异步action
 export const getChatMsgs = () => {
   return dispatch => {
-    // 绑定'receiveMessage'的监听, 来接收服务器发送的消息
-    // 一旦服务器发送消息，可以更新redux中状态数据
-    if (!socket.isFirst) {
-      socket.isFirst = true;
-      socket.on('receiveMsg', function (data) {
-        console.log('浏览器端接收服务器发送的消息:', data)
-        dispatch(updateChatList(data));
-      })
-    }
-    //发送请求
-    reqGetChatMsgs()
-      .then(res => {
-        const result = res.data;
-        if (result.code === 0) {
-          //请求成功
-          dispatch(updateChatMsgs(result.data));
-        } else {
-          dispatch(resetChatMsgs({msg: result.msg}));
-        }
-      })
-      .catch(err => {
-        dispatch(resetChatMsgs({msg: '网络不稳定，请重新试试~'}));
-      })
+    getMsgs(dispatch);
   }
 }
 
+function getMsgs(dispatch) {
+  // 绑定'receiveMessage'的监听, 来接收服务器发送的消息
+  // 一旦服务器发送消息，可以更新redux中状态数据
+  if (!socket.isFirst) {
+    socket.isFirst = true;
+    socket.on('receiveMsg', function (data) {
+      console.log('浏览器端接收服务器发送的消息:', data)
+      dispatch(updateChatList(data));
+    })
+  }
+  //发送请求
+  reqGetChatMsgs()
+    .then(res => {
+      const result = res.data;
+      if (result.code === 0) {
+        //请求成功
+        dispatch(updateChatMsgs(result.data));
+      } else {
+        dispatch(resetChatMsgs({msg: result.msg}));
+      }
+    })
+    .catch(err => {
+      dispatch(resetChatMsgs({msg: '网络不稳定，请重新试试~'}));
+    })
+}
